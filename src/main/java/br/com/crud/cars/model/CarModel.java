@@ -31,6 +31,9 @@ public class CarModel implements Serializable{
     @Column(name = "year")
     private int year;
 
+    @Column(name = "quantity")
+    private int quantity;
+
     @Column(name = "price")
     private BigDecimal price;
 
