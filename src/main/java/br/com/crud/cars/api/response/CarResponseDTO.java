@@ -12,5 +12,6 @@ public class CarResponseDTO {
     private String model;
     private String color;
     private int year;
+    private int quantity;
     private BigDecimal price;
 }
