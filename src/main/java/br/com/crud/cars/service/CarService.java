@@ -11,6 +11,10 @@ import br.com.crud.cars.repository.CarRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +31,13 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
 
-    public List<CarResponseDTO> getAllCars() {
-        List<CarModel> cars = carRepository.findAll();
-        return cars.stream().map(this::convertToCarResponse).collect(Collectors.toList());
+    public Page<CarResponseDTO> getAllCars(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<CarModel> carPage = carRepository.findAll(pageable);
+
+        List<CarResponseDTO> carResponseDTOList = carPage.getContent().stream().map(this::convertToCarResponse).collect(Collectors.toList());
+
+        return new PageImpl<>(carResponseDTOList,pageable,carPage.getTotalElements());
     }
 
 
@@ -38,34 +46,22 @@ public class CarService {
         return convertToCarResponse(existingCar);
     }
 
-    public List<CarResponseDTO> getCarsBySpecification(String model,
-                                                       String color,
-                                                       String make,
-                                                       int year,
-                                                       BigDecimal price,
-                                                       int quantity){
-        Specification<CarModel> spec = Specification.where(null);
-        if(model != null){
-            spec = spec.and(CarSpecification.byModel(model));
-        }
-        if(color != null){
-            spec = spec.and(CarSpecification.byColor(color));
-        }
-        if(make != null){
-            spec = spec.and(CarSpecification.byMake(make));
-        }
-        if(year != 0){
-            spec = spec.and(CarSpecification.byYear(year));
-        }
-        if(price != null){
-            spec = spec.and(CarSpecification.byPrice(price));
-        }
-        if(quantity != 0){
-            spec = spec.and(CarSpecification.byModel(model));
-        }
-        List<CarModel> cars = carRepository.findAll(spec);
+    public Page<CarResponseDTO> getCarsBySpecification(String model,
+                                                             String color,
+                                                             String make,
+                                                             int year,
+                                                             BigDecimal price,
+                                                             int quantity,
+                                                             int page,
+                                                             int size){
+        Specification<CarModel> spec = CarSpecification.bySepecification(make, model, color, year, price, quantity);
+        Pageable pageable = PageRequest.of(page,size);
 
-        return cars.stream().map(this::convertToCarResponse).collect(Collectors.toList()) ;
+        Page<CarModel> carPage = carRepository.findAll(spec,pageable);
+        List<CarResponseDTO> carResponseDTOList = carPage.getContent().stream().map(this::convertToCarResponse).collect(Collectors.toList()) ;
+
+        return new PageImpl<>(carResponseDTOList,pageable,carPage.getTotalElements());
+
     }
 
     @Transactional
