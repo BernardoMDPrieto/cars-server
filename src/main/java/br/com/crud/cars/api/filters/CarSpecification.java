@@ -30,7 +30,34 @@ public class CarSpecification {
         return (root, query, builder) -> builder.equal(root.get("price"), price);
     }
 
-    public static Specification<CarModel> byQuantityGreaterThan(int quantity) {
+    public static Specification<CarModel> byQuantity(int quantity) {
         return (root, query, builder) -> builder.equal(root.get("quantity"), quantity);
+    }
+    public static Specification<CarModel> bySepecification(String make,
+                                                                      String model,
+                                                                      String color,
+                                                                      int year,
+                                                                      BigDecimal price,
+                                                                      int quantity) {
+        Specification<CarModel> spec = Specification.where(null);
+        if (make != null && !make.isEmpty()) {
+            spec = spec.and(byMake(make));
+        }
+        if (model != null && !model.isEmpty()) {
+            spec = spec.and(byModel(model));
+        }
+        if (color != null && !color.isEmpty()) {
+            spec = spec.and(byColor(color));
+        }
+        if (year != 0) {
+            spec = spec.and(byYear(year));
+        }
+        if (price != null) {
+            spec = spec.and(byPrice(price));
+        }
+        if (quantity != 0) {
+            spec = spec.and(byQuantity(quantity));
+        }
+        return spec;
     }
 }
