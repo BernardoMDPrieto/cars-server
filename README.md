@@ -1,4 +1,4 @@
-<h1>Cadastro de Veículos - Projeto CRUD</h1>
+<h1>Garagem virtual - Projeto CRUD</h1>
     <h2>Visão Geral</h2>
     <p>Este projeto é um CRUD básico de carros desenvolvido em Java Spring Boot com gerenciamento de dependências pelo Maven. Ele segue os padrões de arquitetura MVC e possui conexão com um banco de dados MySQL para armazenar e gerenciar informações sobre veículos.</p>
     <h2>Funcionalidades Principais</h2>
