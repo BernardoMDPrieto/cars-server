@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,7 +19,7 @@ public class CarController {
     @Autowired
     private CarService carService;
 
-    @PostMapping("/cars")
+    @PostMapping("/cars")   
     public ResponseEntity<CarResponseDTO> saveCar(@RequestBody @Valid CarRequestDTO carRequestDTO) {
             CarResponseDTO savedCar = carService.saveCar(carRequestDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedCar);
@@ -29,7 +28,7 @@ public class CarController {
     @GetMapping("/cars")
     public ResponseEntity<Page<CarResponseDTO>> getCars(
                                                         @RequestParam(defaultValue = "0") int page,
-                                                        @RequestParam(defaultValue = "10") int size) {
+                                                        @RequestParam(defaultValue = "5") int size) {
             Page<CarResponseDTO> cars = carService.getAllCars(page,size);
             return ResponseEntity.status(HttpStatus.OK).body(cars);
     }
