@@ -27,6 +27,7 @@
             <li><strong>resource</strong>: Classes controladoras (Controllers) do sistema.</li>
         </ul>
         <li><strong>exceptions</strong>: Lidando com tratamento de erros da aplicação.</li>
+        <li><strong>configurations</strong>: Configurando o CORS da aplicação.</li>
         <li><strong>model</strong>: Contém a entidade principal do banco de dados.</li>
         <li><strong>service</strong>: Regras de negócio e lógica da aplicação.</li>
         <li><strong>repository</strong>: Interfaces para injeção de dependências e acesso ao banco de dados.</li>
