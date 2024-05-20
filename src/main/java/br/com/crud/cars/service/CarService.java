@@ -1,5 +1,6 @@
 package br.com.crud.cars.service;
 
+import br.com.crud.cars.api.filters.CarFilterDto;
 import br.com.crud.cars.api.filters.CarSpecification;
 import br.com.crud.cars.api.request.CarRequestDTO;
 import br.com.crud.cars.api.response.CarResponseDTO;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.math.BigDecimal;
@@ -46,16 +48,9 @@ public class CarService {
         return convertToCarResponse(existingCar);
     }
 
-    public Page<CarResponseDTO> getCarsBySpecification(String model,
-                                                             String color,
-                                                             String make,
-                                                             int year,
-                                                             BigDecimal price,
-                                                             int quantity,
-                                                             int page,
-                                                             int size){
-        Specification<CarModel> spec = CarSpecification.bySepecification(make, model, color, year, price, quantity);
-        Pageable pageable = PageRequest.of(page,size);
+    public Page<CarResponseDTO> getCarsBySpecification(CarFilterDto carFilterDto,
+                                                       Pageable pageable){
+        Specification<CarModel> spec = CarSpecification.bySpecification(carFilterDto);
 
         Page<CarModel> carPage = carRepository.findAll(spec,pageable);
         List<CarResponseDTO> carResponseDTOList = carPage.getContent().stream().map(this::convertToCarResponse).collect(Collectors.toList()) ;
@@ -68,7 +63,7 @@ public class CarService {
     public CarResponseDTO saveCar(CarRequestDTO carRequestDTO){
         CarModel carModel = convertToCarModel(carRequestDTO);
 
-        Specification<CarModel> spec = CarSpecification.byCarAtributes(carModel);
+        Specification<CarModel> spec = CarSpecification.byCarAttributes(carModel);
         if(carRepository.findOne(spec).isPresent()){
             throw new CarAlredyExistsException("");
         }
