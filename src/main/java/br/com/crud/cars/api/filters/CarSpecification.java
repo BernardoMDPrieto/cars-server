@@ -7,16 +7,16 @@ import java.math.BigDecimal;
 
 public class CarSpecification {
     public static Specification<CarModel> byMake(String make) {
-        return (root, query, builder) -> builder.equal(root.get("make"), make);
+        return (root, query, builder) -> builder.like(root.get("make"), "%" + make + "%");
     }
     public static Specification<CarModel> byModel(String model) {
-        return (root, query, builder) -> builder.equal(root.get("model"), model);
+        return (root, query, builder) -> builder.like(root.get("model"),"%" + model + "%" );
     }
     public static Specification<CarModel> byColor(String color) {
-        return (root, query, builder) -> builder.equal(root.get("color"),color);
+        return (root, query, builder) -> builder.like(root.get("color"), "%" + color + "%" );
     }
     public static Specification<CarModel> byYear(int year) {
-        return (root, query, builder) -> builder.equal(root.get("year"), year);
+        return (root, query, builder) -> builder.equal(root.get("year"),  year );
     }
     public static Specification<CarModel> byCarAtributes(CarModel carModel){
         Specification<CarModel> spec = Specification.where(
