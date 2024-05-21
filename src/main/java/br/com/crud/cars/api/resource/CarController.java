@@ -6,6 +6,7 @@ import br.com.crud.cars.api.response.CarResponseDTO;
 import br.com.crud.cars.service.CarService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +20,12 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
+@AllArgsConstructor
 public class CarController {
 
-    @Autowired
-    private CarService carService;
+
+
+    private final CarService carService;
 
     @PostMapping("/cars")
     public ResponseEntity<CarResponseDTO> saveCar(@RequestBody @Valid CarRequestDTO carRequestDTO) {
