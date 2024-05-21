@@ -6,20 +6,28 @@ import org.springframework.data.jpa.domain.Specification;
 import java.math.BigDecimal;
 
 public class CarSpecification {
+    public static Specification<CarModel> byYear(Integer year) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("year"), year);
+    }
+
     public static Specification<CarModel> byMake(String make) {
-        return (root, query, builder) -> builder.like(root.get("make"), "%" + make + "%");
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("make"), "%" + make + "%");
     }
 
     public static Specification<CarModel> byModel(String model) {
-        return (root, query, builder) -> builder.like(root.get("model"), "%" + model + "%");
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("model"), "%" + model + "%");
     }
 
     public static Specification<CarModel> byColor(String color) {
-        return (root, query, builder) -> builder.like(root.get("color"), "%" + color + "%");
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("color"), "%" + color + "%");
     }
 
-    public static Specification<CarModel> byYear(Integer year) {
-        return (root, query, builder) -> builder.equal(root.get("year"), year);
+    public static Specification<CarModel> byPrice(BigDecimal price) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("price"), price);
+    }
+
+    public static Specification<CarModel> byQuantity(Integer quantity) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("quantity"), quantity);
     }
 
     public static Specification<CarModel> byCarAttributes(CarModel carModel) {
@@ -29,17 +37,10 @@ public class CarSpecification {
                 .and(byModel(carModel.getModel()));
     }
 
-    public static Specification<CarModel> byPrice(BigDecimal price) {
-        return (root, query, builder) -> builder.equal(root.get("price"), price);
-    }
-
-    public static Specification<CarModel> byQuantity(Integer quantity) {
-        return (root, query, builder) -> builder.equal(root.get("quantity"), quantity);
-    }
-
     public static Specification<CarModel> bySpecification(CarFilterDto carFilterDto) {
+
         if (carFilterDto == null) {
-            throw new IllegalArgumentException("carFilterDto não pode ser nulo");
+            return Specification.where(null);
         }
 
         Specification<CarModel> spec = Specification.where(null);

@@ -20,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 public class CarController {
+
     @Autowired
     private CarService carService;
 
@@ -31,14 +32,13 @@ public class CarController {
 
     @GetMapping("/cars")
     public ResponseEntity<Page<CarResponseDTO>> getCars(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Page<CarResponseDTO> cars = carService.getAllCars(page, size);
+            @PageableDefault(page = 0, size = 10, sort = "make", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<CarResponseDTO> cars = carService.getAllCars(pageable.getPageNumber(),pageable.getPageSize());
         return ResponseEntity.status(HttpStatus.OK).body(cars);
     }
 
     @GetMapping("/cars/spec")
-    public ResponseEntity<Page<CarResponseDTO>> getCarsBySpecification(@RequestParam(required = false) CarFilterDto carFilterDto,
+    public ResponseEntity<Page<CarResponseDTO>> getCarsBySpecification(@ModelAttribute CarFilterDto carFilterDto,
                                                                        @PageableDefault(page = 0, size = 10, sort = "make", direction = Sort.Direction.ASC) Pageable pageable) {
 
 

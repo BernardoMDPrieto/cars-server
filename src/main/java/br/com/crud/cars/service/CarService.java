@@ -50,12 +50,15 @@ public class CarService {
 
     public Page<CarResponseDTO> getCarsBySpecification(CarFilterDto carFilterDto,
                                                        Pageable pageable){
+
         Specification<CarModel> spec = CarSpecification.bySpecification(carFilterDto);
+        Page<CarModel> carPage = carRepository.findAll(spec, pageable);
 
-        Page<CarModel> carPage = carRepository.findAll(spec,pageable);
-        List<CarResponseDTO> carResponseDTOList = carPage.getContent().stream().map(this::convertToCarResponse).collect(Collectors.toList()) ;
+        List<CarResponseDTO> carResponseDTOList = carPage.getContent().stream()
+                .map(this::convertToCarResponse)
+                .collect(Collectors.toList());
 
-        return new PageImpl<>(carResponseDTOList,pageable,carPage.getTotalElements());
+        return new PageImpl<>(carResponseDTOList, pageable, carPage.getTotalElements());
 
     }
 
